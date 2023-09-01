@@ -5,6 +5,7 @@ export default {
     extend: {
       fontFamily: {
         "rubik": ["Rubik Iso","cursive"],
+        "bowlby": ["Bowlby One","cursive"],
       },
       colors: {
         "primary": "#2B3A8C",
