@@ -1,6 +1,9 @@
 import { Formik } from 'formik'
 import React from 'react'
 import * as Yup from 'yup'
+import service from '../service'
+import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 const validationSchema = Yup.object({
     username: Yup.string().required('Required').min(3, 'Username must be at least 3 characters'),
@@ -12,10 +15,27 @@ const initialValues = {
     password: '',
 }
 
+
 export default function RegisterPage() {
+    const navigate = useNavigate()
     return (
         <div className='w-full h-[500px] bg-quinary rounded-lg my-2 flex items-center justify-center'>
-            <Formik validationSchema={validationSchema} initialValues={initialValues} >
+            <Formik validationSchema={validationSchema} initialValues={initialValues}
+                onSubmit={(values) => {
+                    service.post('/auth/login', {
+                        username: values.username,
+                        password: values.password
+                    })
+                        .then((res) => {
+                            localStorage.setItem('token', res.data.token)
+                            navigate('/dashboard')
+                        })
+                        .catch((err) => {
+                            console.log("err", err);
+                            toast.error("Username or password is wrong")
+                        })
+                }}
+            >
                 {
                     ({ values, handleChange, handleSubmit, errors,
                         isValid, dirty,

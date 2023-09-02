@@ -17,6 +17,7 @@ import {
 import HomePage from './pages/Home';
 import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
+import DashboardPage from './pages/Dashboard';
 
 
 const router = createBrowserRouter([
@@ -37,6 +38,17 @@ const router = createBrowserRouter([
       {
         path: "/register",
         Component: RegisterPage
+      },
+      {
+        path: "/dashboard",
+        loader: () => {
+          let token = localStorage.getItem('token')
+          if (!token) {
+            return redirect('/login')
+          }
+          return null;
+        },
+        Component: DashboardPage
       }
     ],
   },
