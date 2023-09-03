@@ -18,6 +18,7 @@ import HomePage from './pages/Home';
 import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
 import DashboardPage from './pages/Dashboard';
+import { UserProvider } from './contexts/user.context';
 
 
 const router = createBrowserRouter([

@@ -1,25 +1,49 @@
+import { useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
+import { useUserContext } from "../contexts/user.context"
 
 const Navbar = () => {
     const navigate = useNavigate()
+
+    let userCtx = useUserContext()
+
+    useEffect(() => {
+        userCtx.getUser()
+    }, [])
+
     return <div className='w-full px-4 items-center bg-primary h-[60px] flex justify-between'>
         <h1 className='font-rubik cursor-pointer text-white'
             onClick={() => {
                 navigate('/')
             }}
         >ListMyLinks</h1>
-        <div className="flex gap-4">
+
+        {!userCtx.user.isLoggedIn ? <div className="flex gap-4">
             <button className='text-white bg-quaternary px-4 rounded-lg py-1'
-                onClick={()=>{
+                onClick={() => {
                     navigate('/login')
                 }}
             > Login </button>
             <button className='text-white bg-quaternary px-4 rounded-lg py-1'
-                onClick={()=>{
+                onClick={() => {
                     navigate('/register')
                 }}
             > Register </button>
         </div>
+            :
+            <div className="flex gap-4">
+                <button className='text-white bg-quaternary px-4 rounded-lg py-1'
+                    onClick={() => {
+                        navigate('/dashboard')
+                    }}
+                > Dashboard </button>
+                <button className='text-white bg-quaternary px-4 rounded-lg py-1'
+                    onClick={() => {
+                        userCtx.logout()
+                        navigate('/')
+                    }}
+                > Logout </button>
+            </div>}
     </div>
 }
 
