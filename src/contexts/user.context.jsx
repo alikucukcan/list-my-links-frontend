@@ -19,7 +19,7 @@ const UserProvider = ({ children }) => {
         username: '',
         email: '',
         isLoggedIn: false,
-        fullname: '',
+        fullName: '',
         profilePicture: '',
         userMessage: '',
         bioText: '',
