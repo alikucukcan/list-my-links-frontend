@@ -3,7 +3,7 @@ import React from 'react'
 import * as Yup from 'yup'
 import service from '../service'
 import { toast } from 'react-toastify'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 const validationSchema = Yup.object({
   fullName: Yup.string().required('Required').min(3, 'Full name must be at least 3 characters'),
@@ -23,9 +23,14 @@ const initialValues = {
 
 export default function RegisterPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
+
   return (
     <div className='w-full h-[500px] bg-quinary rounded-lg my-2 flex items-center justify-center'>
-      <Formik validationSchema={validationSchema} initialValues={initialValues}
+      <Formik validationSchema={validationSchema} initialValues={{
+        ...initialValues,
+        username: searchParams.get("username") || ''
+      }}
         onSubmit={(values) => {
           service.post('/auth/register', {
             fullName: values.fullName,

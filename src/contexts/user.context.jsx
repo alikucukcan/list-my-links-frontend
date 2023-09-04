@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import service from "../service";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +28,7 @@ const UserProvider = ({ children }) => {
 
     const [user, setUser] = useState(initialValue)
     const navigate = useNavigate()
+
 
     const login = (username, password) => {
         service.post('/auth/login', {
@@ -63,17 +64,69 @@ const UserProvider = ({ children }) => {
             navigate('/login')
         }
         return service.get(`/user/${username}`).then((res) => {
-                setUser({
-                    ...user,
-                    ...res.data,
-                    isLoggedIn: true,
-                })
-            }).catch((err) => {
-                console.log("err", err);
+            setUser({
+                ...user,
+                ...res.data,
+                isLoggedIn: true,
             })
+        }).catch((err) => {
+            console.log("err", err);
+        })
     }
 
-    return <UserContext.Provider value={{ user, setUser, login, getUser, logout }}>
+    const getAuthHeaders = () => {
+        const token = localStorage.getItem('token')
+        return {
+            headers: {
+                Authorization: `${token}`
+            }
+        }
+    }
+
+    const updateUser = (data) => {
+
+        let modifiedData = data;
+        delete modifiedData.username;
+        delete modifiedData.email;
+        delete modifiedData.token;
+        delete modifiedData.isLoggedIn;
+        delete modifiedData.password
+        delete modifiedData.profilePicture
+
+
+        modifiedData.linkGroups = modifiedData.linkGroups.map((linkGroup) => {
+            return {
+                ...linkGroup,
+                _id: undefined,
+                links: linkGroup.links.map((link) => {
+                    return {
+                        ...link,
+                        _id: undefined
+                    }
+                })
+            }
+        })
+
+        return service.post(`/user/update`, data, {
+            ...getAuthHeaders()
+
+        }).then((res) => {
+            setUser({
+                ...user,
+                ...res.data,
+            })
+            toast.success("Update success")
+        }).catch((err) => {
+            toast.error("Update failed")
+            console.log("err update", err);
+        })
+    }
+
+    const getProfile = (username) => {
+        return service.get(`/user/${username}`)
+    }
+
+    return <UserContext.Provider value={{ user, setUser, login, getUser, logout, updateUser, getProfile }}>
         {children}
     </UserContext.Provider>
 }

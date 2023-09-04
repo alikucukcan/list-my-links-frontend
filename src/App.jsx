@@ -19,6 +19,7 @@ import LoginPage from './pages/Login';
 import RegisterPage from './pages/Register';
 import DashboardPage from './pages/Dashboard';
 import { UserProvider } from './contexts/user.context';
+import ProfilePage from './pages/Profile';
 
 
 const router = createBrowserRouter([
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
         path: "/register",
         Component: RegisterPage
       },
+
       {
         path: "/dashboard",
         loader: () => {
@@ -50,8 +52,13 @@ const router = createBrowserRouter([
           return null;
         },
         Component: DashboardPage
-      }
+      },
+      {
+        path: "/:username",
+        Component: ProfilePage
+      },
     ],
+
   },
 ]);
 
