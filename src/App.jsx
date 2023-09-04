@@ -20,6 +20,8 @@ import RegisterPage from './pages/Register';
 import DashboardPage from './pages/Dashboard';
 import { UserProvider } from './contexts/user.context';
 import ProfilePage from './pages/Profile';
+import ForgotPasswordPage from './pages/ForgotPassword';
+import ResetPasswordPage from './pages/ResetPassword';
 
 
 const router = createBrowserRouter([
@@ -41,7 +43,14 @@ const router = createBrowserRouter([
         path: "/register",
         Component: RegisterPage
       },
-
+      {
+        path: "/forgot-password",
+        Component: ForgotPasswordPage
+      },
+      {
+        path: "/reset-password",
+        Component: ResetPasswordPage
+      },
       {
         path: "/dashboard",
         loader: () => {

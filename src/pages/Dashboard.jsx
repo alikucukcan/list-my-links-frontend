@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { FaTrash as IconTrash, FaCheck as IconCheck } from 'react-icons/fa'
-import { TbWorldBolt as IconWorld } from 'react-icons/tb'
+import { TbWorldBolt as IconWorld,TbUserCheck as IconUser } from 'react-icons/tb'
 import { AiOutlineClear as IconClear } from 'react-icons/ai'
 import { useUserContext } from '../contexts/user.context'
 import { toast } from 'react-toastify'
@@ -220,6 +220,11 @@ export default function DashboardPage() {
                             userCtx.updateUser(temp)
                         }}
                         className='rounded-lg text-primary w-fit self-end bg-slate-100 min-w-6 h-6 gap-2 px-4 py-2 flex items-center justify-center'> Publish <IconWorld /> </button>
+                    <button
+                        onClick={() => {
+                            window.open(`/${state.username}`, '_blank')
+                        }}
+                        className='rounded-lg text-primary w-fit self-end bg-slate-100 min-w-6 h-6 gap-2 px-4 py-2 flex items-center justify-center'> Visit Profile <IconUser /> </button>
                 </div>
                 <InputTextArea save={setTextToState} onChange={handleChange} value={temp.bioText} name="bioText" title="Type Your Bio Text" placeholder="I'm from Berlin and I'm a student..." />
                 <InputTextArea save={setTextToState} onChange={handleChange} value={temp.userMessage} name="userMessage" title="Type a message for visitors" placeholder="Please follow my social accounts..." />

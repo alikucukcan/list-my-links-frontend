@@ -126,7 +126,23 @@ const UserProvider = ({ children }) => {
         return service.get(`/user/${username}`)
     }
 
-    return <UserContext.Provider value={{ user, setUser, login, getUser, logout, updateUser, getProfile }}>
+    const forgotPassword = (email) => {
+        // /auth/forgot-password
+        return service.post(`/auth/forgot-password`, {
+            email: email
+        })
+    }
+
+    const resetPassword = (email, code, password) => {
+        // /auth/forgot-password
+        return service.post(`/auth/reset-password`, {
+            email: email,
+            code: code,
+            password: password
+        })
+    }
+
+    return <UserContext.Provider value={{ user, setUser, login, getUser, logout, updateUser, getProfile, forgotPassword, resetPassword }}>
         {children}
     </UserContext.Provider>
 }

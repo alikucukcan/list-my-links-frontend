@@ -19,7 +19,7 @@ const initialValues = {
 
 export default function RegisterPage() {
     const navigate = useNavigate()
-    const {login} = useUserContext()
+    const { login } = useUserContext()
     return (
         <div className='w-full h-[500px] bg-quinary rounded-lg my-2 flex items-center justify-center'>
             <Formik validationSchema={validationSchema} initialValues={initialValues}
@@ -43,6 +43,11 @@ export default function RegisterPage() {
                             {errors && errors.username && <p className='text-white text-[9px]'> {errors.username} </p>}
                             <input onChange={handleChange} value={values.password} name="password" type="password" placeholder='password' className='border-none outline-none h-[40px] bg-gray-100 rounded-lg px-4' />
                             {errors && errors.password && <p className='text-white text-[9px]'> {errors.password} </p>}
+                            <div
+                                onClick={() => {
+                                    navigate('/forgot-password')
+                                }}
+                                className='text-white cursor-pointer text-[9px] text-right'> Forgot password? </div>
                             <button type='submit'
                                 disabled={!isValid || !dirty}
                                 className='w-full disabled:opacity-50 transition-all bg-yellow-500 rounded-lg text-black font-bold py-1 mt-4'> Login </button>
