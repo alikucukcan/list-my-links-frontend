@@ -92,7 +92,8 @@ const UserProvider = ({ children }) => {
         delete modifiedData.isLoggedIn;
         delete modifiedData.password
         delete modifiedData.profilePicture
-
+        delete modifiedData._id
+        delete modifiedData.__v
 
         modifiedData.linkGroups = modifiedData.linkGroups.map((linkGroup) => {
             return {
@@ -107,14 +108,14 @@ const UserProvider = ({ children }) => {
             }
         })
 
+
+
         return service.post(`/user/update`, data, {
             ...getAuthHeaders()
 
         }).then((res) => {
-            setUser({
-                ...user,
-                ...res.data,
-            })
+            return getUser()
+        }).then(() => {
             toast.success("Update success")
         }).catch((err) => {
             toast.error("Update failed")

@@ -2,6 +2,7 @@ import React from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useUserContext } from '../contexts/user.context'
 import { toast } from 'react-toastify'
+import themes from '../themes'
 
 export default function ProfilePage() {
     const [state, setState] = React.useState(null)
@@ -24,9 +25,13 @@ export default function ProfilePage() {
 
     return (
         state ?
-            <div className='w-full min-h-[500px] max-w-[429px] self-center mx-auto bg-quinary rounded-lg gap-8 p-4 my-2 flex flex-col lg:flex-row lg:items-start items-center'>
-                <div className="flex flex-col items-center py-10  w-full h-full rounded-xl aspect-[428/926] bg-white">
-                    <img className='w-[120px] h-[120px]' src={"http://localhost:8080/public/" + state.profilePicture} />
+            <div
+
+                className='w-full min-h-[500px] max-w-[429px] self-center mx-auto rounded-lg gap-8 p-4 my-2 flex flex-col lg:flex-row lg:items-start items-center'>
+                <div
+                    style={themes[state.theme].style}
+                    className="flex flex-col items-center py-10  w-full h-full rounded-xl aspect-[428/926] bg-white">
+                    <img className='rounded-full w-[120px] h-[120px]' src={"http://localhost:8080/public/" + state.profilePicture} />
                     <h2 className='text-[30px] mt-6 font-bowlby'> {state.fullName} </h2>
                     {state.bioText && <div className="flex flex-col mt-4  items-center w-full px-12 gap-2">
                         <span className='self-start justify-self-start text-[8px] font-bowlby'> User Biography :</span>

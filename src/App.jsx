@@ -22,6 +22,7 @@ import { UserProvider } from './contexts/user.context';
 import ProfilePage from './pages/Profile';
 import ForgotPasswordPage from './pages/ForgotPassword';
 import ResetPasswordPage from './pages/ResetPassword';
+import SettingsPage from './pages/Settings';
 
 
 const router = createBrowserRouter([
@@ -61,6 +62,17 @@ const router = createBrowserRouter([
           return null;
         },
         Component: DashboardPage
+      },
+      {
+        path: "/dashboard/settings",
+        loader: () => {
+          let token = localStorage.getItem('token')
+          if (!token) {
+            return redirect('/login')
+          }
+          return null;
+        },
+        Component: SettingsPage
       },
       {
         path: "/:username",

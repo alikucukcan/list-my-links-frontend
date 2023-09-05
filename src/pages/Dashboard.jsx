@@ -1,13 +1,53 @@
 import React, { useEffect } from 'react'
 import { FaTrash as IconTrash, FaCheck as IconCheck } from 'react-icons/fa'
-import { TbWorldBolt as IconWorld,TbUserCheck as IconUser } from 'react-icons/tb'
+import { TbWorldBolt as IconWorld, TbUserCheck as IconUser } from 'react-icons/tb'
 import { AiOutlineClear as IconClear } from 'react-icons/ai'
 import { useUserContext } from '../contexts/user.context'
 import { toast } from 'react-toastify'
+import themes from '../themes'
 
-const PreviewComponent = ({ state }) => {
-    return <div className="flex flex-col items-center py-10  w-full h-full rounded-xl aspect-[428/926] bg-white">
-        <img className='w-[120px] h-[120px]' src={"http://localhost:8080/public/" + state.profilePicture} />
+
+
+const ChangeTheme = ({
+    theme,
+    setTheme
+}) => {
+    const [selected, setSelected] = React.useState(theme || 't2')
+
+    useEffect(() => {
+        setTheme(selected)
+    }, [selected])
+
+    return <div className="w-[40px] border h-fit py-4 absolute flex flex-col gap-2 items-center left-2 top-2 bg-primary rounded-xl">
+        {
+            Object.keys(themes).map((theme, index) => {
+                return <div key={index}
+                    onClick={() => {
+                        setSelected(theme)
+                    }}
+                    className={"rounded-full w-6 h-6 "}
+                    style={{
+                        ...themes[theme].style,
+                        ...theme == selected && {
+                            border: "5px solid white"
+                        }
+                    }}
+                ></div>
+            })
+        }
+
+    </div >
+}
+
+const PreviewComponent = ({ state, changeTheme }) => {
+    return <div className="flex flex-col relative border-2 shadow-2xl shadow-white items-center py-10  w-full h-full rounded-xl aspect-[428/926] bg-white"
+        style={{
+            ...themes[state.theme].style
+        }}
+
+    >
+        <ChangeTheme theme={state.theme} setTheme={changeTheme} />
+        <img className='w-[120px] h-[120px] rounded-full' src={"http://localhost:8080/public/" + state.profilePicture} />
         <h2 className='text-[30px] mt-6 font-bowlby'> {state.fullName} </h2>
         {state.bioText && <div className="flex flex-col mt-4  items-center w-full px-12 gap-2">
             <span className='self-start justify-self-start text-[8px] font-bowlby'> User Biography :</span>
@@ -203,6 +243,11 @@ export default function DashboardPage() {
         setTemp(prev => ({ ...prev, linkGroups }))
     }
 
+    const changeTheme = (theme) => {
+        setTemp(prev => ({ ...prev, theme }))
+        setState(prev => ({ ...prev, theme }))
+    }
+
     return (
         state?.username && state && temp ? <div className='w-full min-h-[500px] bg-quinary rounded-lg gap-8 p-4 my-2 flex flex-col lg:flex-row lg:items-start items-center'>
             <div className="bg-quaternary gap-4 flex flex-col rounded-2xl mt-14 p-4 min-w-[60%] w-full lg:w-auto min-h-[300px] h-full">
@@ -236,7 +281,7 @@ export default function DashboardPage() {
             </div>
             {state && <div className="flex-[auto] flex flex-col items-center gap-2 justify-start w-full lg:w-auto h-full p-5">
                 <h4 className='font-bowlby'> Preview </h4>
-                <PreviewComponent state={state} />
+                <PreviewComponent changeTheme={changeTheme} state={state} />
             </div>}
         </div> : <></>
     )

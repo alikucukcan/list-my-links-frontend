@@ -1,6 +1,7 @@
 import { useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useUserContext } from "../contexts/user.context"
+import { FaCog as IconSettings } from "react-icons/fa"
 
 const Navbar = () => {
     const navigate = useNavigate()
@@ -32,6 +33,11 @@ const Navbar = () => {
         </div>
             :
             <div className="flex gap-4">
+                <button
+                    onClick={() => {
+                        navigate('/dashboard/settings')
+                    }}
+                    title="Settings" className=" hover:animate-spin h-fit self-center text-white"> <IconSettings /> </button>
                 <button className='text-white bg-quaternary px-4 rounded-lg py-1'
                     onClick={() => {
                         navigate('/dashboard')
