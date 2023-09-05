@@ -95,7 +95,7 @@ const UserProvider = ({ children }) => {
         delete modifiedData._id
         delete modifiedData.__v
 
-        modifiedData.linkGroups = modifiedData.linkGroups.map((linkGroup) => {
+        if (modifiedData?.linkGroups) modifiedData.linkGroups = modifiedData.linkGroups.map((linkGroup) => {
             return {
                 ...linkGroup,
                 _id: undefined,
@@ -143,7 +143,59 @@ const UserProvider = ({ children }) => {
         })
     }
 
-    return <UserContext.Provider value={{ user, setUser, login, getUser, logout, updateUser, getProfile, forgotPassword, resetPassword }}>
+
+    const deleteAccount = () => {
+        return service.delete(`/user/me`, {
+            ...getAuthHeaders()
+        }).then(() => {
+            toast.success("Account deleted")
+            logout()
+            navigate('/')
+        }).catch((err) => {
+            toast.error("Account deletion failed")
+            console.log("err", err);
+        })
+    }
+
+    const updatePassword = (newPassword) => {
+        return service.post(`/user/update`, {
+            password: newPassword,
+        }, {
+            ...getAuthHeaders()
+        }).then(() => {
+            toast.success("Password updated")
+            logout()
+            navigate('/login')
+        }).catch((err) => {
+            toast.error("Password update failed")
+            console.log("err", err);
+        })
+
+    }
+
+
+    const updateProfilePicture = (file) => {
+        const token = localStorage.getItem('token')
+        const formData = new FormData()
+        formData.append('profilePicture', file)
+
+        return service.post(`/user/upload`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                Authorization: `${token}`
+            }
+        }).then(() => {
+            toast.success("Profile picture updated")
+            return getUser()
+        }).catch((err) => {
+            toast.error("Profile picture update failed")
+            console.log("err", err);
+            getUser()
+        })
+
+    }
+
+    return <UserContext.Provider value={{ user, setUser, login, getUser, logout, updateUser, getProfile, forgotPassword, resetPassword, deleteAccount, updatePassword, updateProfilePicture }}>
         {children}
     </UserContext.Provider>
 }

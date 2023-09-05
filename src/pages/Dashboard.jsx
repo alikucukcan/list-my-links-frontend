@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
-import { FaTrash as IconTrash, FaCheck as IconCheck } from 'react-icons/fa'
+import { FaTrash as IconTrash, FaCheck as IconCheck, FaCamera as IconCamera } from 'react-icons/fa'
 import { TbWorldBolt as IconWorld, TbUserCheck as IconUser } from 'react-icons/tb'
 import { AiOutlineClear as IconClear } from 'react-icons/ai'
 import { useUserContext } from '../contexts/user.context'
 import { toast } from 'react-toastify'
 import themes from '../themes'
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -40,6 +41,28 @@ const ChangeTheme = ({
 }
 
 const PreviewComponent = ({ state, changeTheme }) => {
+
+
+    const [file, setFile] = React.useState(null)
+    const [image, setImage] = React.useState(`${import.meta.env.VITE_API}/public/${state.profilePicture}`)
+
+    const { updateProfilePicture } = useUserContext()
+
+    useEffect(() => {
+        if (file) {
+            updateProfilePicture(file)
+            const reader = new FileReader()
+            reader.onloadend = () => {
+                setImage(reader.result)
+            }
+            reader.readAsDataURL(file)
+        }
+    }, [file])
+
+
+
+
+
     return <div className="flex flex-col relative border-2 shadow-2xl shadow-white items-center py-10  w-full h-full rounded-xl aspect-[428/926] bg-white"
         style={{
             ...themes[state.theme].style
@@ -47,7 +70,17 @@ const PreviewComponent = ({ state, changeTheme }) => {
 
     >
         <ChangeTheme theme={state.theme} setTheme={changeTheme} />
-        <img className='w-[120px] h-[120px] rounded-full' src={"http://localhost:8080/public/" + state.profilePicture} />
+        <div className="h-fit w-fit border rounded-full relative">
+            <input
+                onChange={(e) => {
+                    setFile(e.target.files[0])
+                }}
+                type="file" className="absolute w-full h-full opacity-0 border z-[2]" />
+            <button className="absolute w-[30px] h-[30px] border-2 !text-tertiary bottom-3 border-secondary flex items-center justify-center text-[14px] right-3 rounded-full bg-primary">
+                <IconCamera />
+            </button>
+            <img className='w-[120px] h-[120px] rounded-full' src={image} />
+        </div>
         <h2 className='text-[30px] mt-6 font-bowlby'> {state.fullName} </h2>
         {state.bioText && <div className="flex flex-col mt-4  items-center w-full px-12 gap-2">
             <span className='self-start justify-self-start text-[8px] font-bowlby'> User Biography :</span>
@@ -67,7 +100,13 @@ const PreviewComponent = ({ state, changeTheme }) => {
                     <h3 className='font-bold'> {linkGroup.title} </h3>
                     {
                         linkGroup.links.map((link, index) => {
-                            return <a key={index} className='text-blue-400 hover:underline border rounded-lg px-4 py-2' href={link.url}> {link.title} </a>
+                            return <a key={index}
+
+                                className='border rounded-lg px-4 py-2'
+                                style={
+                                    { ...themes[state.theme].linkStyle }
+                                }
+                                href={link.url}> {link.title} </a>
                         })
                     }
                 </div>
@@ -194,6 +233,7 @@ export default function DashboardPage() {
     const [state, setState] = React.useState(null)
     const [temp, setTemp] = React.useState(null)
 
+    const navigate = useNavigate()
 
     useEffect(() => {
         userCtx.getUser()
@@ -267,7 +307,7 @@ export default function DashboardPage() {
                         className='rounded-lg text-primary w-fit self-end bg-slate-100 min-w-6 h-6 gap-2 px-4 py-2 flex items-center justify-center'> Publish <IconWorld /> </button>
                     <button
                         onClick={() => {
-                            window.open(`/${state.username}`, '_blank')
+                            navigate(`/${state.username}`)
                         }}
                         className='rounded-lg text-primary w-fit self-end bg-slate-100 min-w-6 h-6 gap-2 px-4 py-2 flex items-center justify-center'> Visit Profile <IconUser /> </button>
                 </div>

@@ -31,7 +31,7 @@ export default function ProfilePage() {
                 <div
                     style={themes[state.theme].style}
                     className="flex flex-col items-center py-10  w-full h-full rounded-xl aspect-[428/926] bg-white">
-                    <img className='rounded-full w-[120px] h-[120px]' src={"http://localhost:8080/public/" + state.profilePicture} />
+                    <img className='rounded-full w-[120px] h-[120px]' src={ import.meta.env.VITE_API + "/public/" + state.profilePicture} />
                     <h2 className='text-[30px] mt-6 font-bowlby'> {state.fullName} </h2>
                     {state.bioText && <div className="flex flex-col mt-4  items-center w-full px-12 gap-2">
                         <span className='self-start justify-self-start text-[8px] font-bowlby'> User Biography :</span>

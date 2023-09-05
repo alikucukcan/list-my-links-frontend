@@ -9,7 +9,8 @@ const Navbar = () => {
     let userCtx = useUserContext()
 
     useEffect(() => {
-        userCtx.getUser()
+        let token = localStorage.getItem('token')
+        if (token) userCtx.getUser()
     }, [])
 
     return <div className='w-full px-4 items-center bg-primary h-[60px] flex justify-between'>
