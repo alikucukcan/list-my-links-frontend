@@ -24,7 +24,6 @@ const Section1 = () => {
         <button
           className="w-fit px-4 py-1 mt-4 bg-yellow-500 rounded-lg text-black font-bold"
           onClick={() => {
-            console.log("dada");
             navigate(`/register?username=${username}`);
           }}
         >
